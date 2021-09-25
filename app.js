@@ -52,11 +52,10 @@ function toCheckPalindromeInAllFormats(date){
 function isLeapYear(year){
     if(year % 400 === 0){
         return true
-    }if ( year % 100 === 0){
-        return false 
-    }if (year % 4 === 0){
+    } 
+    if (year % 4 === 0){
         return true
-    }
+    }else 
     return false
 }
 
@@ -104,53 +103,41 @@ function toGetNextDate(date){
         }
         nextDate = toFindNextDate(nextDate)
     }
-    return [ctr, nextDate]
+    return  nextDate
 }
-date = {
-    day :12,
-    month:2,
-    year: 2020,
-}
-
-function toFindPreviousDate(date){
-    var day = date.day  - 1;
-    var month = date.month ;
-    var year = date.year ;
-    var daysInMonth = [31,28,31,30,31,30,31,31,30,31,30,31]
-    if(day === 0){
-       month--;
-    }
-    if(month === 0){
-        month = 12;
-        day = 31;
-        year--;
-    }if (month === 2){
-        if(isLeapYear(year)){
-            day=29
-        }else{
-            day = 28
-        }
-    }else {
-        day = daysInMonth[month - 1];
-    }
-    return {
-        day : day ,
-        month : month,
-        year: year,
-    }
-}
-
-function toGetPreviuosDate(date){
-    var previousDate = toFindPreviousDate(date);
-    var ctr = 0 ;
+function toGetNextDays(date){
+    var nextDate = toFindNextDate(date);
+    var ctr = 0 ; 
     while(1){
-        ctr++ ;
-        var isPalindrome =  toCheckPalindromeInAllFormats(previousDate);
+        ctr++;
+        var isPalindrome = toCheckPalindromeInAllFormats(nextDate)
         if(isPalindrome){
-            break ;
+            break;
         }
-    previousDate = toFindPreviousDate(previousDate);
+        nextDate = toFindNextDate(nextDate)
     }
-    return [ ctr , previousDate]
+    return  ctr
 }
-console.log(toGetPreviuosDate(date))
+
+function clickHandler(){
+    var bodyString = dateOfBirth.value;
+    if (bodyString !== ''){
+        var listOfDate = bodyString.split("-")
+        var date = {
+            day: Number(listOfDate[2]),
+            month:Number(listOfDate[1]),
+            year :Number(listOfDate[0]),
+        };
+        var isPalindrome = toCheckPalindromeInAllFormats(date);
+        if(isPalindrome){
+            inputElement.innerText= "yay, you birthday is palindrome 🎉"
+        }
+        else{
+        let nxtDate = toGetNextDate(date)
+        let ctr = toGetNextDays(date)
+        inputElement.innerText = `The next palindrome date is ${nxtDate.day}-${nxtDate.month}-${nxtDate.year} 
+        and missed by ${ctr} days 😥` } 
+    }
+}
+
+palindromeButton.addEventListener("click" , clickHandler)
